@@ -44,6 +44,20 @@ exports.user_signup = (req, res, next) => {
         })     
 }
 
+exports.userCreate = async (req, res, next) => {
+    const input = req.body;
+    if(input.password){
+        input.password = bcrypt.hashSync(req.body.password, 10);
+    }
+    try {
+        const user = await User.create(input);
+        res.json(user)
+    } catch (error) {
+        next(error)
+    }
+   
+}
+
 exports.user_login = (req, res, next) => {
     User.find({ email: req.body.email })
         .exec()
